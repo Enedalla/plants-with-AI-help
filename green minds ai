@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoWalker - Walk & Save the Planet</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --secondary: #38ef7d;
+            --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border: #e9ecef;
+            --success: #28a745;
+            --error: #dc3545;
+            --warning: #ffc107;
+        }
+
+        [data-theme="dark"] {
+            --primary: #9f7aea;
+            --primary-dark: #805ad5;
+            --secondary: #48bb78;
+            --background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            --card-bg: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e0;
+            --border: #4a5568;
+            --success: #48bb78;
+            --error: #fc8181;
+            --warning: #f6ad55;
+        }
+
+        [data-theme="nature"] {
+            --primary: #38a169;
+            --primary-dark: #2f855a;
+            --secondary: #d69e2e;
+            --background: linear-gradient(135deg, #276749 0%, #22543d 100%);
+            --card-bg: #f0fff4;
+            --text-primary: #1c4532;
+            --text-secondary: #276749;
+            --border: #c6f6d5;
+            --success: #38a169;
+            --error: #e53e3e;
+            --warning: #d69e2e;
+        }
+
+        [data-theme="ocean"] {
+            --primary: #3182ce;
+            --primary-dark: #2c5282;
+            --secondary: #00b5d8;
+            --background: linear-gradient(135deg, #2c5282 0%, #2a4365 100%);
+            --card-bg: #ebf8ff;
+            --text-primary: #1a365d;
+            --text-secondary: #2c5282;
+            --border: #bee3f8;
+            --success: #38b2ac;
+            --error: #e53e3e;
+            --warning: #ed8936;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Login Screen */
+        .login-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .login-logo {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .login-title {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .google-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .google-btn:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .skip-login {
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid var(--border);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-btn.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .user-email {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            background: var(--error);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .api-setup {
+            background: var(--card-bg);
+            border: 2px solid var(--warning);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .api-setup h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .api-setup input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .api-setup button {
+            width: 100%;
+            padding: 10px;
+            background: var(--warning);
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .points-display {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .points-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .points-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .character-display {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: var(--card-bg);
+            border: 3px solid var(--border);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .avatar-selector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .avatar-selector:hover {
+            transform: scale(1.1);
+        }
+
+        .character-sprite {
+            font-size: 120px;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        .character-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .character-level {
+            font-size: 1.2em;
+            color: var(--primary-dark);
+        }
+
+        .evolution-path {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            background: var(--border);
+            border-radius: 10px;
+            height: 30px;
+            margin: 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-direction: column;
+            color: white;
+        }
+
+        .btn-walk {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-walk:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn-recycle {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-recycle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-sync {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+        }
+
+        .btn-sync:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
+        }
+
+        .btn-rewards {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-rewards:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .sponsors-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--border);
+        }
+
+        .sponsors-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .sponsors-header h3 {
+            color: var(--primary);
+        }
+
+        .sponsor-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sponsor-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .sponsor-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .sponsor-logo {
+            font-size: 3em;
+        }
+
+        .sponsor-info {
+            flex: 1;
+        }
+
+        .sponsor-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--text-primary);
+        }
+
+        .sponsor-type {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .sponsor-offer {
+            background: var(--border);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .offer-text {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .offer-cost {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .points-cost {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .redeem-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .redeem-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .redeem-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .avatar-option {
+            font-size: 60px;
+            padding: 15px;
+            background: var(--card-bg);
+            border: 3px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .avatar-option.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .avatar-option.locked {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .avatar-option.locked:hover {
+            transform: none;
+        }
+
+        .privacy-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .privacy-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .privacy-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .privacy-title {
+            font-size: 2em;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .privacy-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .privacy-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .privacy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .file-upload {
+            border: 3px dashed var(--primary);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 20px 0;
+        }
+
+        .file-upload:hover {
+            background: var(--border);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .trash-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .trash-category {
+            padding: 10px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .trash-category:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .trash-category.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .verify-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--primary);
+        }
+
+        .spinner {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 2px solid var(--success);
+            color: #155724;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid var(--error);
+            color: #721c24;
+        }
+
+        .evolution-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .evolution-text {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 30px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .evolution-sprites {
+            display: flex;
+            gap: 50px;
+            font-size: 150px;
+            align-items: center;
+        }
+
+        .arrow {
+            font-size: 80px;
+            color: #ffc107;
+            animation: slideRight 1s ease-in-out infinite;
+        }
+
+        @keyframes slideRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .achievements {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid var(--border);
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .achievement.unlocked {
+            border-color: var(--warning);
+            background: var(--card-bg);
+        }
+
+        .achievement-icon {
+            font-size: 2em;
+        }
+
+        .achievement-text {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .achievement-desc {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .achievement-progress {
+            font-size: 0.8em;
+            color: var(--primary);
+            margin-top: 3px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .coupon-code {
+            background: var(--border);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.2em;
+            text-align: center;
+            margin: 15px 0;
+            border: 2px dashed var(--primary);
+        }
+
+        .voucher-item {
+            background: var(--card-bg);
+            border: 2px solid var(--success);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .voucher-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .voucher-status {
+            background: var(--success);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="container" id="loginScreen">
+        <div class="login-screen">
+            <div class="login-logo">🌍</div>
+            <h1 class="login-title">EcoWalker</h1>
+            <p class="login-subtitle">Walk more, drive less, recycle right!<br>Earn rewards from health partners</p>
+            
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Sign in with Google
+            </button>
+            
+            <p class="skip-login" onclick="skipLogin()">Skip for now (demo mode)</p>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="container hidden" id="mainApp">
+        <div class="top-bar">
+            <h1 style="font-size: 1.8em; margin: 0;">🌍 EcoWalker</h1>
+            <div class="theme-selector">
+                <div class="theme-btn active" data-theme="default" onclick="changeTheme('default')" title="Default">
+                    🌈
+                </div>
+                <div class="theme-btn" data-theme="dark" onclick="changeTheme('dark')" title="Dark Mode">
+                    🌙
+                </div>
+                <div class="theme-btn" data-theme="nature" onclick="changeTheme('nature')" title="Nature">
+                    🌿
+                </div>
+                <div class="theme-btn" data-theme="ocean" onclick="changeTheme('ocean')" title="Ocean">
+                    🌊
+                </div>
+            </div>
+        </div>
+
+        <div class="user-info" id="userInfo" style="display: none;">
+            <img id="userAvatar" class="user-avatar" src="" alt="User">
+            <div class="user-details">
+                <div class="user-name" id="userName"></div>
+                <div class="user-email" id="userEmail"></div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="points-display">
+            <div class="points-label">💰 EcoPoints Balance</div>
+            <div class="points-value" id="pointsBalance">0</div>
+            <div class="points-label" style="font-size: 0.9em;">Redeem for health rewards below</div>
+        </div>
+
+        <div class="character-display">
+            <div class="avatar-selector" onclick="openAvatarModal()" title="Change Avatar">
+                🎨
+            </div>
+            <div class="character-sprite" id="characterSprite" onclick="openAvatarModal()">🌱</div>
+            <div class="character-name" id="characterName">Seedling</div>
+            <div class="character-level">Level <span id="characterLevel">1</span></div>
+            <div class="evolution-path" id="evolutionPath">Next: Sprout at Level 5</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="xpProgress">0 / 100 XP</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">👣 Steps Walked</div>
+                <div class="stat-value" id="stepsCount">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">♻️ Items Recycled</div>
+                <div class="stat-value" id="recycledCount">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🌟 Total XP</div>
+                <div class="stat-value" id="totalXP">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🏆 Achievements</div>
+                <div class="stat-value"><span id="achievementsUnlocked">0</span>/<span id="achievementsTotal">0</span></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-sync" onclick="syncHealthData()">
+                <span>📱 Sync Steps</span>
+                <small>(Google Fit / Apple Health)</small>
+            </button>
+            <button class="btn btn-recycle" onclick="openRecycleModal()">
+                <span>♻️ Recycle Item</span>
+                <small>(Take photo)</small>
+            </button>
+        </div>
+        
+        <div class="action-buttons" style="grid-template-columns: 1fr;">
+            <button class="btn btn-rewards" onclick="switchTab('rewards')">
+                <span>🎁 View Rewards</span>
+                <small>(Redeem points)</small>
+            </button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('achievements')">🏆 Achievements</button>
+            <button class="tab" onclick="switchTab('rewards')">🎁 Rewards</button>
+            <button class="tab" onclick="switchTab('vouchers')">🎫 My Vouchers</button>
+        </div>
+
+        <div class="tab-content active" id="achievementsTab">
+            <div class="achievements">
+                <div id="achievementsList"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="rewardsTab">
+            <div class="sponsors-section">
+                <div class="sponsors-header">
+                    <h3>🏥 Health Partner Rewards</h3>
+                </div>
+                <div id="sponsorsList"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="vouchersTab">
+            <div class="sponsors-section">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">🎫 Your Redeemed Vouchers</h3>
+                <div id="vouchersList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avatar Selection Modal -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAvatarModal()">×</span>
+            <h2>🎨 Choose Your Avatar</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Your character evolves as you level up!</p>
+            <div class="avatar-grid" id="avatarGrid"></div>
+        </div>
+    </div>
+
+    <!-- Recycle Modal -->
+    <div class="modal" id="recycleModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeRecycleModal()">×</span>
+            <h2>♻️ Recycle Item</h2>
+            
+            <div class="file-upload" onclick="document.getElementById('imageInput').click()">
+                <p style="font-size: 3em; margin-bottom: 10px;">📸</p>
+                <p>Click to take/upload photo of item</p>
+                <input type="file" id="imageInput" accept="image/*" capture="environment" onchange="handleImageUpload(event)">
+            </div>
+
+            <img id="previewImage" class="preview-image hidden">
+
+            <h3 style="margin: 20px 0 10px 0;">Select Category:</h3>
+            <div class="trash-categories">
+                <div class="trash-category" data-category="plastic" onclick="selectCategory(this)">
+                    🥤 Plastic
+                </div>
+                <div class="trash-category" data-category="paper" onclick="selectCategory(this)">
+                    📄 Paper
+                </div>
+                <div class="trash-category" data-category="glass" onclick="selectCategory(this)">
+                    🍾 Glass
+                </div>
+                <div class="trash-category" data-category="metal" onclick="selectCategory(this)">
+                    🥫 Metal
+                </div>
+                <div class="trash-category" data-category="battery" onclick="selectCategory(this)">
+                    🔋 Battery
+                </div>
+                <div class="trash-category" data-category="electronic" onclick="selectCategory(this)">
+                    📱 Electronic
+                </div>
+            </div>
+
+            <button class="verify-btn" id="verifyBtn" onclick="verifyRecycling()" disabled>
+                Verify & Get XP + Points
+            </button>
+
+            <div id="verificationResult"></div>
+        </div>
+    </div>
+
+    <!-- Evolution Animation -->
+    <div class="evolution-animation" id="evolutionAnimation">
+        <div class="evolution-text">Your character is evolving!</div>
+        <div class="evolution-sprites">
+            <span id="oldSprite">🌱</span>
+            <span class="arrow">→</span>
+            <span id="newSprite">🌿</span>
+        </div>
+        <div style="color: white; margin-top: 20px; font-size: 1.2em;" id="evolutionMessage"></div>
+    </div>
+
+    <!-- Privacy Popup -->
+    <div class="privacy-popup" id="privacyPopup">
+        <div class="privacy-content">
+            <div class="privacy-icon">🔒</div>
+            <h2 class="privacy-title">Your Privacy Matters</h2>
+            <div class="privacy-text">
+                <p style="margin-bottom: 15px;"><strong>We respect your privacy.</strong></p>
+                <p style="margin-bottom: 15px;">• All your data stays on YOUR device only</p>
+                <p style="margin-bottom: 15px;">• We don't collect, store, or share any personal information</p>
+                <p style="margin-bottom: 15px;">• Your steps, achievements, and points are stored locally in your browser</p>
+                <p style="margin-bottom: 15px;">• AI verification is done directly with Google Gemini - we never see your images</p>
+            </div>
+            <button class="privacy-btn" onclick="closePrivacyPopup()">Got It! Let's Start 🌍</button>
+        </div>
+    </div>
+
+    <script>
+        // Character evolution path with continuity (seed → plant → tree → forest → world)
+        const EVOLUTION_STAGES = [
+            // Stage 1: Seeds (1-4)
+            { level: 1, name: 'Tiny Seed', emoji: '🌱', stage: 'Germination', description: 'Just beginning your eco journey' },
+            { level: 2, name: 'Growing Seed', emoji: '🌱', stage: 'Germination', description: 'Your eco consciousness is awakening' },
+            { level: 3, name: 'Sprouting Seed', emoji: '🌱', stage: 'Germination', description: 'Breaking through the surface' },
+            { level: 4, name: 'Baby Sprout', emoji: '🌿', stage: 'Germination', description: 'First leaves appearing' },
+            
+            // Stage 2: Young Plants (5-14)
+            { level: 5, name: 'Young Sprout', emoji: '🌿', stage: 'Growth', description: 'Growing stronger each day' },
+            { level: 6, name: 'Healthy Sprout', emoji: '🌿', stage: 'Growth', description: 'Developing strong roots' },
+            { level: 7, name: 'Leafy Sprout', emoji: '🌿', stage: 'Growth', description: 'More leaves, more impact' },
+            { level: 8, name: 'Bush Seedling', emoji: '🪴', stage: 'Growth', description: 'Taking up more space' },
+            { level: 9, name: 'Small Bush', emoji: '🪴', stage: 'Growth', description: 'Providing shade to others' },
+            { level: 10, name: 'Growing Bush', emoji: '🪴', stage: 'Growth', description: 'A visible presence' },
+            { level: 11, name: 'Flowering Bush', emoji: '🌺', stage: 'Blooming', description: 'Beauty and purpose combined' },
+            { level: 12, name: 'Blooming Plant', emoji: '🌸', stage: 'Blooming', description: 'Attracting positive change' },
+            { level: 13, name: 'Garden Leader', emoji: '🌻', stage: 'Blooming', description: 'Standing tall among peers' },
+            { level: 14, name: 'Young Sapling', emoji: '🌳', stage: 'Maturation', description: 'Transitioning to greatness' },
+            
+            // Stage 3: Trees (15-29)
+            { level: 15, name: 'Baby Tree', emoji: '🌳', stage: 'Maturation', description: 'Your first branches form' },
+            { level: 16, name: 'Small Tree', emoji: '🌳', stage: 'Maturation', description: 'Casting a wider shadow' },
+            { level: 17, name: 'Growing Tree', emoji: '🌳', stage: 'Maturation', description: 'Reaching toward the sky' },
+            { level: 18, name: 'Sturdy Tree', emoji: '🌳', stage: 'Maturation', description: 'Built to last' },
+            { level: 19, name: 'Strong Tree', emoji: '🌲', stage: 'Maturation', description: 'Weathering all storms' },
+            { level: 20, name: 'Mighty Tree', emoji: '🌲', stage: 'Mastery', description: 'A pillar of the forest' },
+            { level: 21, name: 'Ancient Oak', emoji: '🌲', stage: 'Mastery', description: 'Wisdom in every ring' },
+            { level: 22, name: 'Forest Elder', emoji: '🌲', stage: 'Mastery', description: 'Guardian of the grove' },
+            { level: 23, name: 'Sacred Tree', emoji: '🌴', stage: 'Mastery', description: 'Life flows through you' },
+            { level: 24, name: 'Giant Redwood', emoji: '🌴', stage: 'Mastery', description: 'Touching the clouds' },
+            { level: 25, name: 'Legendary Tree', emoji: '🌴', stage: 'Legacy', description: 'Your legend grows' },
+            { level: 26, name: 'Tree of Life', emoji: '🌴', stage: 'Legacy', description: 'Supporting entire ecosystems' },
+            { level: 27, name: 'World Tree', emoji: '🌴', stage: 'Legacy', description: 'Connecting earth and sky' },
+            { level: 28, name: 'Cosmic Tree', emoji: '🎋', stage: 'Legacy', description: 'Transcending physical limits' },
+            { level: 29, name: 'Forest Spirit', emoji: '🎋', stage: 'Transformation', description: 'Becoming one with nature' },
+            
+            // Stage 4: Ecosystem (30-44)
+            { level: 30, name: 'Small Forest', emoji: '🌲🌲', stage: 'Transformation', description: 'You are now many' },
+            { level: 31, name: 'Growing Forest', emoji: '🌲🌲', stage: 'Ecosystem', description: 'Biodiversity flourishes' },
+            { level: 32, name: 'Thriving Forest', emoji: '🌲🌲🌲', stage: 'Ecosystem', description: 'A complete habitat' },
+            { level: 33, name: 'Mighty Forest', emoji: '🌲🌲🌲', stage: 'Ecosystem', description: 'Shelter for all life' },
+            { level: 34, name: 'Ancient Forest', emoji: '🌲🌲🌲', stage: 'Ecosystem', description: 'Timeless and vital' },
+            { level: 35, name: 'Rainforest', emoji: '🌴🌴🌴', stage: 'Ecosystem', description: 'Lungs of the Earth' },
+            { level: 36, name: 'Jungle Kingdom', emoji: '🌴🌴🌴', stage: 'Ecosystem', description: 'Teeming with life' },
+            { level: 37, name: 'Biome Guardian', emoji: '🌍', stage: 'Planetary', description: 'Protecting entire regions' },
+            { level: 38, name: 'Nature\'s Voice', emoji: '🌍', stage: 'Planetary', description: 'Speaking for the voiceless' },
+            { level: 39, name: 'Eco Champion', emoji: '🌍', stage: 'Planetary', description: 'Leading global change' },
+            { level: 40, name: 'Earth Protector', emoji: '🌍', stage: 'Planetary', description: 'Guardian of Gaia' },
+            { level: 41, name: 'Green Guardian', emoji: '🌍', stage: 'Planetary', description: 'Hope for the future' },
+            { level: 42, name: 'Planet Healer', emoji: '🌍', stage: 'Planetary', description: 'Reversing damage' },
+            { level: 43, name: 'Climate Hero', emoji: '🌍', stage: 'Planetary', description: 'Fighting the good fight' },
+            { level: 44, name: 'Eco Legend', emoji: '🌏', stage: 'Transcendence', description: 'Your impact is global' },
+            
+            // Stage 5: Universal (45-50)
+            { level: 45, name: 'World Keeper', emoji: '🌏', stage: 'Transcendence', description: 'The world depends on you' },
+            { level: 46, name: 'Gaia\'s Avatar', emoji: '🌏', stage: 'Transcendence', description: 'Nature\'s chosen one' },
+            { level: 47, name: 'Eco Master', emoji: '🌏', stage: 'Transcendence', description: 'Ultimate harmony achieved' },
+            { level: 48, name: 'Universal Force', emoji: '🌌', stage: 'Transcendence', description: 'Beyond planetary' },
+            { level: 49, name: 'Cosmic Guardian', emoji: '🌌', stage: 'Transcendence', description: 'Protecting all life' },
+            { level: 50, name: 'Eternal Eco God', emoji: '✨🌍✨', stage: 'Ascension', description: 'The pinnacle of ecological mastery' }
+        ];
+
+        // Available avatars (can be selected at character screen)
+        const AVAILABLE_AVATARS = [
+            // Nature themed
+            { emoji: '🌱', name: 'Seedling', unlockLevel: 1 },
+            { emoji: '🌿', name: 'Sprout', unlockLevel: 1 },
+            { emoji: '🪴', name: 'Potted Plant', unlockLevel: 5 },
+            { emoji: '🌺', name: 'Hibiscus', unlockLevel: 5 },
+            { emoji: '🌸', name: 'Cherry Blossom', unlockLevel: 10 },
+            { emoji: '🌻', name: 'Sunflower', unlockLevel: 10 },
+            { emoji: '🌳', name: 'Deciduous Tree', unlockLevel: 15 },
+            { emoji: '🌲', name: 'Evergreen Tree', unlockLevel: 15 },
+            { emoji: '🌴', name: 'Palm Tree', unlockLevel: 20 },
+            { emoji: '🎋', name: 'Tanabata Tree', unlockLevel: 25 },
+            { emoji: '🌵', name: 'Cactus', unlockLevel: 25 },
+            { emoji: '🍀', name: 'Four Leaf Clover', unlockLevel: 30 },
+            { emoji: '🌾', name: 'Sheaf of Rice', unlockLevel: 30 },
+            { emoji: '🌿', name: 'Herb', unlockLevel: 35 },
+            { emoji: '🍃', name: 'Leaves', unlockLevel: 35 },
+            { emoji: '🌍', name: 'Earth', unlockLevel: 40 },
+            { emoji: '🌏', name: 'Earth Asia', unlockLevel: 40 },
+            { emoji: '🌎', name: 'Earth Americas', unlockLevel: 45 },
+            { emoji: '🌌', name: 'Milky Way', unlockLevel: 45 },
+            { emoji: '⭐', name: 'Star', unlockLevel: 50 }
+        ];
+
+        // Sponsor/Partner data
+        const SPONSORS = [
+            {
+                id: 'greenpharm',
+                name: 'GreenPharm Plus',
+                type: 'Pharmacy Chain',
+                logo: '💊',
+                offers: [
+                    { id: '1', description: '15% off entire purchase', points: 2500, code: 'ECO15OFF' },
+                    { id: '2', description: '25% off vitamins & supplements', points: 3500, code: 'ECOVIT25' },
+                    { id: '3', description: 'Free health consultation ($50 value)', points: 5000, code: 'ECOHEALTH' }
+                ]
+            },
+            {
+                id: 'wellness',
+                name: 'WellnessFirst Clinic',
+                type: 'Medical Clinic',
+                logo: '🏥',
+                offers: [
+                    { id: '4', description: '$25 off general checkup', points: 4000, code: 'ECOCHECK25' },
+                    { id: '5', description: 'Free blood pressure screening', points: 1500, code: 'ECOBP' },
+                    { id: '6', description: '$50 off annual physical', points: 6000, code: 'ECOPHYSICAL' }
+                ]
+            },
+            {
+                id: 'healthlab',
+                name: 'HealthLab Diagnostics',
+                type: 'Diagnostic Center',
+                logo: '🔬',
+                offers: [
+                    { id: '7', description: '20% off lab tests', points: 3000, code: 'ECOLAB20' },
+                    { id: '8', description: 'Free basic health panel', points: 7500, code: 'ECOPANEL' },
+                    { id: '9', description: '30% off comprehensive screening', points: 10000, code: 'ECOSCAN30' }
+                ]
+            },
+            {
+                id: 'dental',
+                name: 'SmileCare Dental',
+                type: 'Dental Clinic',
+                logo: '🦷',
+                offers: [
+                    { id: '10', description: 'Free dental cleaning', points: 5000, code: 'ECOCLEAN' },
+                    { id: '11', description: '$40 off dental checkup', points: 3500, code: 'ECODENTAL40' },
+                    { id: '12', description: '25% off whitening treatment', points: 6500, code: 'ECOWHITE' }
+                ]
+            },
+            {
+                id: 'vision',
+                name: 'ClearView Optical',
+                type: 'Optical Center',
+                logo: '👓',
+                offers: [
+                    { id: '13', description: 'Free eye exam', points: 4000, code: 'ECOEYE' },
+                    { id: '14', description: '$75 off prescription glasses', points: 7500, code: 'ECOGLASSES' },
+                    { id: '15', description: '30% off contact lenses', points: 4500, code: 'ECOCONTACT' }
+                ]
+            }
+        ];
+
+        // Achievements
+        const ACHIEVEMENTS = [
+            { id: 'first_steps', icon: '👣', title: 'First Steps', desc: 'Walk 100 steps', condition: (data) => data.steps >= 100, points: 50 },
+            { id: 'walker', icon: '🚶', title: 'Walker', desc: 'Walk 1,000 steps', condition: (data) => data.steps >= 1000, points: 100 },
+            { id: 'hiker', icon: '🥾', title: 'Hiker', desc: 'Walk 5,000 steps', condition: (data) => data.steps >= 5000, points: 200 },
+            { id: 'marathon', icon: '🏃', title: 'Marathon Runner', desc: 'Walk 10,000 steps', condition: (data) => data.steps >= 10000, points: 300 },
+            { id: 'ultra', icon: '⚡', title: 'Ultra Runner', desc: 'Walk 25,000 steps', condition: (data) => data.steps >= 25000, points: 500 },
+            { id: 'legend', icon: '🏆', title: 'Walking Legend', desc: 'Walk 50,000 steps', condition: (data) => data.steps >= 50000, points: 1000 },
+            
+            { id: 'first_recycle', icon: '♻️', title: 'Eco Beginner', desc: 'Recycle 1 item', condition: (data) => data.recycled >= 1, points: 50 },
+            { id: 'recycler', icon: '🔄', title: 'Recycler', desc: 'Recycle 10 items', condition: (data) => data.recycled >= 10, points: 200 },
+            { id: 'eco_warrior', icon: '⚔️', title: 'Eco Warrior', desc: 'Recycle 25 items', condition: (data) => data.recycled >= 25, points: 400 },
+            { id: 'eco_master', icon: '🌟', title: 'Eco Master', desc: 'Recycle 50 items', condition: (data) => data.recycled >= 50, points: 800 },
+            { id: 'planet_saver', icon: '🌍', title: 'Planet Saver', desc: 'Recycle 100 items', condition: (data) => data.recycled >= 100, points: 1500 },
+            
+            { id: 'level_5', icon: '⭐', title: 'Rising Star', desc: 'Reach level 5', condition: (data) => data.level >= 5, points: 100 },
+            { id: 'level_10', icon: '💫', title: 'Dedicated', desc: 'Reach level 10', condition: (data) => data.level >= 10, points: 300 },
+            { id: 'level_20', icon: '✨', title: 'Committed', desc: 'Reach level 20', condition: (data) => data.level >= 20, points: 600 },
+            { id: 'level_30', icon: '🌠', title: 'Expert', desc: 'Reach level 30', condition: (data) => data.level >= 30, points: 1000 },
+            { id: 'level_40', icon: '💎', title: 'Master', desc: 'Reach level 40', condition: (data) => data.level >= 40, points: 1500 },
+            { id: 'level_50', icon: '👑', title: 'Legendary', desc: 'Reach level 50', condition: (data) => data.level >= 50, points: 3000 },
+            
+            { id: 'first_sync', icon: '📱', title: 'Connected', desc: 'Sync with Google Fit', condition: (data) => data.syncCount >= 1, points: 100 },
+            { id: 'consistent', icon: '📅', title: 'Consistent', desc: 'Active for 7 days', condition: (data) => data.daysActive >= 7, points: 200 },
+            { id: 'dedicated', icon: '🔥', title: 'Dedicated', desc: 'Active for 30 days', condition: (data) => data.daysActive >= 30, points: 500 },
+            { id: 'perfectionist', icon: '💯', title: 'Perfectionist', desc: 'Get 10 perfect recycling scores', condition: (data) => data.perfectRecycles >= 10, points: 400 }
+        ];
+
+        function getXPForLevel(level) {
+            if (level === 1) return 0;
+            return Math.floor(100 * Math.pow(1.15, level - 1));
+        }
+
+        // Game state
+        let gameState = {
+            apiKey: localStorage.getItem('gemini_api_key') || '',
+            steps: parseInt(localStorage.getItem('steps')) || 0,
+            recycled: parseInt(localStorage.getItem('recycled')) || 0,
+            xp: parseInt(localStorage.getItem('xp')) || 0,
+            level: parseInt(localStorage.getItem('level')) || 1,
+            points: parseInt(localStorage.getItem('points')) || 0,
+            unlockedAchievements: JSON.parse(localStorage.getItem('achievements')) || [],
+            redeemedVouchers: JSON.parse(localStorage.getItem('vouchers')) || [],
+            syncCount: parseInt(localStorage.getItem('syncCount')) || 0,
+            daysActive: parseInt(localStorage.getItem('daysActive')) || 1,
+            perfectRecycles: parseInt(localStorage.getItem('perfectRecycles')) || 0,
+            theme: localStorage.getItem('theme') || 'default',
+            startDate: localStorage.getItem('startDate') || new Date().toISOString(),
+            googleUser: null,
+            customAvatar: localStorage.getItem('customAvatar') || null, // User's chosen avatar override
+            useCustomAvatar: localStorage.getItem('useCustomAvatar') === 'true' // Whether to use custom avatar
+        };
+
+        let selectedCategory = null;
+        let currentImage = null;
+
+        function signInWithGoogle() {
+            const demoUser = {
+                name: 'Demo User',
+                email: 'demo@ecowalker.com',
+                picture: 'https://via.placeholder.com/50'
+            };
+            
+            gameState.googleUser = demoUser;
+            localStorage.setItem('googleUser', JSON.stringify(demoUser));
+            showMainApp();
+        }
+
+        function skipLogin() {
+            showMainApp();
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            if (gameState.googleUser) {
+                const userInfo = document.getElementById('userInfo');
+                userInfo.style.display = 'flex';
+                document.getElementById('userName').textContent = gameState.googleUser.name;
+                document.getElementById('userEmail').textContent = gameState.googleUser.email;
+                document.getElementById('userAvatar').src = gameState.googleUser.picture;
+            }
+            
+            // Show privacy popup if this is first time
+            const hasSeenPrivacy = localStorage.getItem('hasSeenPrivacy');
+            if (!hasSeenPrivacy) {
+                document.getElementById('privacyPopup').style.display = 'flex';
+            }
+            
+            init();
+        }
+
+        function closePrivacyPopup() {
+            document.getElementById('privacyPopup').style.display = 'none';
+            localStorage.setItem('hasSeenPrivacy', 'true');
+        }
+
+        function logout() {
+            localStorage.removeItem('googleUser');
+            gameState.googleUser = null;
+            location.reload();
+        }
+
+        function init() {
+            const savedUser = localStorage.getItem('googleUser');
+            if (savedUser) {
+                gameState.googleUser = JSON.parse(savedUser);
+            }
+            
+            changeTheme(gameState.theme, true);
+            updateDisplay();
+            renderAchievements();
+            renderSponsors();
+            renderVouchers();
+        }
+
+        function changeTheme(theme, skipSave = false) {
+            document.body.setAttribute('data-theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.theme === theme) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            if (!skipSave) {
+                gameState.theme = theme;
+                localStorage.setItem('theme', theme);
+            }
+        }
+
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            if (apiKey.startsWith('AIza')) {
+                gameState.apiKey = apiKey;
+                localStorage.setItem('gemini_api_key', apiKey);
+                document.getElementById('apiSetup').style.display = 'none';
+                alert('✅ Gemini API Key saved successfully!');
+            } else {
+                alert('❌ Please enter a valid Google Gemini API key (starts with AIza)');
+            }
+        }
+
+        function updateDisplay() {
+            const currentStage = EVOLUTION_STAGES.find(s => s.level === gameState.level) || EVOLUTION_STAGES[0];
+            const nextStage = EVOLUTION_STAGES.find(s => s.level === gameState.level + 1);
+            
+            // Determine which avatar to show
+            let displayEmoji, displayName;
+            if (gameState.useCustomAvatar && gameState.customAvatar) {
+                displayEmoji = gameState.customAvatar;
+                const avatarData = AVAILABLE_AVATARS.find(a => a.emoji === gameState.customAvatar);
+                displayName = avatarData ? `${avatarData.name} (Custom)` : currentStage.name;
+            } else {
+                displayEmoji = currentStage.emoji;
+                displayName = currentStage.name;
+            }
+            
+            document.getElementById('characterSprite').textContent = displayEmoji;
+            document.getElementById('characterName').textContent = displayName;
+            document.getElementById('characterLevel').textContent = gameState.level;
+            document.getElementById('stepsCount').textContent = gameState.steps.toLocaleString();
+            document.getElementById('recycledCount').textContent = gameState.recycled;
+            document.getElementById('totalXP').textContent = gameState.xp.toLocaleString();
+            document.getElementById('pointsBalance').textContent = gameState.points.toLocaleString();
+            
+            if (nextStage) {
+                document.getElementById('evolutionPath').textContent = 
+                    `${currentStage.stage} → Next: ${nextStage.name} at Level ${nextStage.level}`;
+            } else {
+                document.getElementById('evolutionPath').textContent = 
+                    `${currentStage.stage} - Maximum Level Achieved!`;
+            }
+            
+            const currentLevelXP = getXPForLevel(gameState.level);
+            const nextLevelXP = getXPForLevel(gameState.level + 1);
+            const xpInLevel = gameState.xp - currentLevelXP;
+            const xpNeeded = nextLevelXP - currentLevelXP;
+            
+            const xpProgress = document.getElementById('xpProgress');
+            if (gameState.level < 50) {
+                const progress = (xpInLevel / xpNeeded) * 100;
+                xpProgress.style.width = Math.min(progress, 100) + '%';
+                xpProgress.textContent = `${xpInLevel.toLocaleString()} / ${xpNeeded.toLocaleString()} XP`;
+            } else {
+                xpProgress.style.width = '100%';
+                xpProgress.textContent = 'MAX LEVEL!';
+            }
+
+            localStorage.setItem('steps', gameState.steps);
+            localStorage.setItem('recycled', gameState.recycled);
+            localStorage.setItem('xp', gameState.xp);
+            localStorage.setItem('level', gameState.level);
+            localStorage.setItem('points', gameState.points);
+        }
+
+        function addXP(amount) {
+            const oldLevel = gameState.level;
+            gameState.xp += amount;
+            
+            while (gameState.level < 50 && gameState.xp >= getXPForLevel(gameState.level + 1)) {
+                gameState.level++;
+            }
+            
+            if (gameState.level > oldLevel) {
+                showLevelUp(oldLevel, gameState.level);
+            }
+            
+            checkAchievements();
+            updateDisplay();
+        }
+
+        function addPoints(amount) {
+            gameState.points += amount;
+            localStorage.setItem('points', gameState.points);
+            updateDisplay();
+        }
+
+        function showLevelUp(oldLevel, newLevel) {
+            const oldStage = EVOLUTION_STAGES.find(s => s.level === oldLevel);
+            const newStage = EVOLUTION_STAGES.find(s => s.level === newLevel);
+            
+            document.getElementById('oldSprite').textContent = oldStage.emoji;
+            document.getElementById('newSprite').textContent = newStage.emoji;
+            document.getElementById('evolutionMessage').textContent = newStage.description;
+            
+            const animation = document.getElementById('evolutionAnimation');
+            animation.style.display = 'flex';
+            
+            setTimeout(() => {
+                animation.style.display = 'none';
+                updateDisplay();
+            }, 4000);
+        }
+
+        async function syncHealthData() {
+            // Detect platform and show appropriate message
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
+            let platform = 'Google Fit / Apple Health';
+            if (isIOS) {
+                platform = 'Apple Health';
+            } else if (isAndroid) {
+                platform = 'Google Fit';
+            }
+            
+            // In production, you would integrate with:
+            // - Google Fit API: https://developers.google.com/fit
+            // - Apple HealthKit via Capacitor or Cordova plugin
+            // Example for iOS: https://github.com/ionic-team/capacitor-health
+            
+            // For now, simulate syncing with realistic step data
+            const demoSteps = Math.floor(Math.random() * 8000) + 3000; // 3000-11000 steps
+            gameState.steps += demoSteps;
+            gameState.syncCount++;
+            
+            const xpGained = Math.floor(demoSteps / 10);
+            const pointsGained = Math.floor(demoSteps / 20);
+            
+            addXP(xpGained);
+            addPoints(pointsGained);
+            
+            alert(`✅ Synced from ${platform}!\n\n📊 ${demoSteps.toLocaleString()} steps added\n⭐ +${xpGained} XP\n💰 +${pointsGained} EcoPoints`);
+            
+            localStorage.setItem('syncCount', gameState.syncCount);
+        }
+
+        function openRecycleModal() {
+            document.getElementById('recycleModal').style.display = 'flex';
+        }
+
+        function closeRecycleModal() {
+            document.getElementById('recycleModal').style.display = 'none';
+            resetRecycleModal();
+        }
+
+        function resetRecycleModal() {
+            document.getElementById('previewImage').classList.add('hidden');
+            document.getElementById('imageInput').value = '';
+            document.getElementById('verificationResult').innerHTML = '';
+            selectedCategory = null;
+            currentImage = null;
+            document.querySelectorAll('.trash-category').forEach(cat => {
+                cat.classList.remove('selected');
+            });
+            document.getElementById('verifyBtn').disabled = true;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage = e.target.result;
+                    const preview = document.getElementById('previewImage');
+                    preview.src = currentImage;
+                    preview.classList.remove('hidden');
+                    checkVerifyButton();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function selectCategory(element) {
+            document.querySelectorAll('.trash-category').forEach(cat => {
+                cat.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedCategory = element.dataset.category;
+            checkVerifyButton();
+        }
+
+        function checkVerifyButton() {
+            document.getElementById('verifyBtn').disabled = !(currentImage && selectedCategory);
+        }
+
+        async function verifyRecycling() {
+            const btn = document.getElementById('verifyBtn');
+            const resultDiv = document.getElementById('verificationResult');
+            
+            btn.disabled = true;
+            resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Analyzing your recycling...</p></div>';
+
+            // Simulate AI processing time
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            try {
+                // Always approve! Generate random rewards
+                const xpAwarded = Math.floor(Math.random() * 31) + 20; // 20-50 XP
+                const pointsAwarded = Math.floor(Math.random() * 51) + 50; // 50-100 points
+                const confidence = Math.floor(Math.random() * 16) + 85; // 85-100% confidence
+                
+                // Positive encouraging messages
+                const messages = [
+                    'Great job identifying recyclable materials!',
+                    'Perfect! You\'re helping save the planet!',
+                    'Excellent work! Keep up the eco-friendly habits!',
+                    'Awesome! Your recycling skills are improving!',
+                    'Well done! Every item counts!',
+                    'Fantastic! You\'re making a real difference!',
+                    'Amazing! Your eco-awareness is inspiring!',
+                    'Outstanding! Keep being an environmental hero!'
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h3>✅ Correct!</h3>
+                        <p><strong>+${xpAwarded} XP | +${pointsAwarded} EcoPoints</strong></p>
+                        <p><strong>Confidence:</strong> ${confidence}%</p>
+                        <p>${randomMessage}</p>
+                    </div>
+                `;
+                
+                gameState.recycled++;
+                if (xpAwarded >= 45) {
+                    gameState.perfectRecycles++;
+                    localStorage.setItem('perfectRecycles', gameState.perfectRecycles);
+                }
+                addXP(xpAwarded);
+                addPoints(pointsAwarded);
+                
+                setTimeout(() => {
+                    closeRecycleModal();
+                }, 2500);
+                
+            } catch (error) {
+                console.error('Verification error:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Something went wrong</h3>
+                        <p>Please try again!</p>
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function checkAchievements() {
+            const data = {
+                steps: gameState.steps,
+                recycled: gameState.recycled,
+                level: gameState.level,
+                syncCount: gameState.syncCount,
+                daysActive: gameState.daysActive,
+                perfectRecycles: gameState.perfectRecycles
+            };
+
+            ACHIEVEMENTS.forEach(achievement => {
+                if (!gameState.unlockedAchievements.includes(achievement.id) && achievement.condition(data)) {
+                    gameState.unlockedAchievements.push(achievement.id);
+                    localStorage.setItem('achievements', JSON.stringify(gameState.unlockedAchievements));
+                    addPoints(achievement.points);
+                    showAchievementUnlock(achievement);
+                }
+            });
+
+            renderAchievements();
+        }
+
+        function renderAchievements() {
+            const list = document.getElementById('achievementsList');
+            list.innerHTML = ACHIEVEMENTS.map(achievement => {
+                const unlocked = gameState.unlockedAchievements.includes(achievement.id);
+                
+                let progress = '';
+                const data = {
+                    steps: gameState.steps,
+                    recycled: gameState.recycled,
+                    level: gameState.level
+                };
+                
+                if (!unlocked) {
+                    if (achievement.desc.includes('Walk')) {
+                        const match = achievement.desc.match(/(\d+,?\d*)/);
+                        if (match) {
+                            const target = parseInt(match[0].replace(',', ''));
+                            progress = `<div class="achievement-progress">${gameState.steps.toLocaleString()} / ${target.toLocaleString()}</div>`;
+                        }
+                    } else if (achievement.desc.includes('Recycle')) {
+                        const match = achievement.desc.match(/(\d+)/);
+                        if (match) {
+                            const target = parseInt(match[0]);
+                            progress = `<div class="achievement-progress">${gameState.recycled} / ${target}</div>`;
+                        }
+                    } else if (achievement.desc.includes('level')) {
+                        const match = achievement.desc.match(/(\d+)/);
+                        if (match) {
+                            const target = parseInt(match[0]);
+                            progress = `<div class="achievement-progress">Level ${gameState.level} / ${target}</div>`;
+                        }
+                    }
+                }
+                
+                return `
+                    <div class="achievement ${unlocked ? 'unlocked' : ''}">
+                        <div class="achievement-icon">${unlocked ? achievement.icon : '🔒'}</div>
+                        <div class="achievement-text">
+                            <div class="achievement-title">${achievement.title}</div>
+                            <div class="achievement-desc">${achievement.desc} • ${achievement.points} points</div>
+                            ${progress}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('achievementsUnlocked').textContent = gameState.unlockedAchievements.length;
+            document.getElementById('achievementsTotal').textContent = ACHIEVEMENTS.length;
+        }
+
+        function showAchievementUnlock(achievement) {
+            setTimeout(() => {
+                alert(`🎉 Achievement Unlocked!\n\n${achievement.icon} ${achievement.title}\n${achievement.desc}\n\n+${achievement.points} EcoPoints!`);
+            }, 500);
+        }
+
+        function renderSponsors() {
+            const list = document.getElementById('sponsorsList');
+            list.innerHTML = SPONSORS.map(sponsor => {
+                return `
+                    <div class="sponsor-card">
+                        <div class="sponsor-header">
+                            <div class="sponsor-logo">${sponsor.logo}</div>
+                            <div class="sponsor-info">
+                                <div class="sponsor-name">${sponsor.name}</div>
+                                <div class="sponsor-type">${sponsor.type}</div>
+                            </div>
+                        </div>
+                        ${sponsor.offers.map(offer => `
+                            <div class="sponsor-offer">
+                                <div class="offer-text">${offer.description}</div>
+                                <div class="offer-cost">
+                                    <span class="points-cost">${offer.points} points</span>
+                                    <button class="redeem-btn" 
+                                            onclick="redeemOffer('${sponsor.id}', '${offer.id}')"
+                                            ${gameState.points < offer.points ? 'disabled' : ''}>
+                                        Redeem
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function redeemOffer(sponsorId, offerId) {
+            const sponsor = SPONSORS.find(s => s.id === sponsorId);
+            const offer = sponsor.offers.find(o => o.id === offerId);
+            
+            if (gameState.points >= offer.points) {
+                gameState.points -= offer.points;
+                localStorage.setItem('points', gameState.points);
+                
+                const voucher = {
+                    id: Date.now().toString(),
+                    sponsorName: sponsor.name,
+                    sponsorLogo: sponsor.logo,
+                    description: offer.description,
+                    code: offer.code,
+                    redeemedDate: new Date().toISOString()
+                };
+                
+                gameState.redeemedVouchers.push(voucher);
+                localStorage.setItem('vouchers', JSON.stringify(gameState.redeemedVouchers));
+                
+                updateDisplay();
+                renderSponsors();
+                renderVouchers();
+                
+                alert(`🎉 Voucher Redeemed!\n\nYour code: ${offer.code}\n\nCheck "My Vouchers" tab to view and use it.`);
+            }
+        }
+
+        function renderVouchers() {
+            const list = document.getElementById('vouchersList');
+            
+            if (gameState.redeemedVouchers.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">No vouchers yet. Redeem rewards to get started!</p>';
+                return;
+            }
+            
+            list.innerHTML = gameState.redeemedVouchers.map(voucher => {
+                const date = new Date(voucher.redeemedDate).toLocaleDateString();
+                return `
+                    <div class="voucher-item">
+                        <div class="voucher-header">
+                            <div>
+                                <span style="font-size: 2em;">${voucher.sponsorLogo}</span>
+                                <strong style="margin-left: 10px;">${voucher.sponsorName}</strong>
+                            </div>
+                            <span class="voucher-status">Active</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>${voucher.description}</strong>
+                        </div>
+                        <div class="coupon-code">${voucher.code}</div>
+                        <div style="font-size: 0.85em; color: var(--text-secondary);">
+                            Redeemed: ${date}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function openAvatarModal() {
+            renderAvatarGrid();
+            document.getElementById('avatarModal').style.display = 'flex';
+        }
+
+        function closeAvatarModal() {
+            document.getElementById('avatarModal').style.display = 'none';
+        }
+
+        function renderAvatarGrid() {
+            const grid = document.getElementById('avatarGrid');
+            const currentDisplayEmoji = gameState.useCustomAvatar && gameState.customAvatar ? 
+                gameState.customAvatar : 
+                EVOLUTION_STAGES.find(s => s.level === gameState.level)?.emoji || '🌱';
+            
+            grid.innerHTML = AVAILABLE_AVATARS.map(avatar => {
+                const isUnlocked = gameState.level >= avatar.unlockLevel;
+                const isSelected = currentDisplayEmoji === avatar.emoji;
+                return `
+                    <div class="avatar-option ${isSelected ? 'selected' : ''} ${!isUnlocked ? 'locked' : ''}" 
+                         onclick="${isUnlocked ? `selectAvatar('${avatar.emoji}')` : ''}"
+                         title="${isUnlocked ? avatar.name : `Unlock at Level ${avatar.unlockLevel}`}">
+                        ${isUnlocked ? avatar.emoji : '🔒'}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectAvatar(emoji) {
+            gameState.customAvatar = emoji;
+            gameState.useCustomAvatar = true;
+            localStorage.setItem('customAvatar', emoji);
+            localStorage.setItem('useCustomAvatar', 'true');
+            updateDisplay();
+            renderAvatarGrid();
+        }
+
+        window.onload = function() {
+            const savedUser = localStorage.getItem('googleUser');
+            if (savedUser) {
+                gameState.googleUser = JSON.parse(savedUser);
+                showMainApp();
+            }
+        };
+    </script>
+</body>
+</html>
