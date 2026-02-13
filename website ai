@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecology & Health - A Sustainable Future</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2d3436;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #2d7a3e, #4a9960);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-item {
+            color: #2d3436;
+            padding: 1rem;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-item:hover {
+            background: #e8f5e9;
+            border-left-color: #2d7a3e;
+            padding-left: 1.5rem;
+        }
+
+        .dropdown-text {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-top: 0.3rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            height: 90vh;
+            background: linear-gradient(135deg, #66bb6a 0%, #2e7d32 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: #2e7d32;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2e7d32;
+            position: relative;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #2e7d32, #66bb6a);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Cards */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            animation: floatIn 0.8s ease-out backwards;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+            border-color: #66bb6a;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: #636e72;
+            line-height: 1.8;
+        }
+
+        /* Image Placeholder */
+        .image-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2e7d32;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Alternating Sections */
+        .section:nth-child(even) {
+            background: #f1f8f4;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .stat-item {
+            animation: countUp 2s ease-out;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #636e72;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Scroll Animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">🌱 EcoHealth</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#climate" class="nav-link">Climate & Environment</a>
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item">
+                            <strong>Global Warming</strong>
+                            <div class="dropdown-text">Understanding climate change and its impact on our planet</div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <strong>Renewable Energy</strong>
+                            <div class="dropdown-text">Sustainable energy solutions for a greener future</div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <strong>Carbon Footprint</strong>
+                            <div class="dropdown-text">Reducing emissions and living sustainably</div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a href="#ai" class="nav-link">AI Solutions</a>
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item">
+                            <strong>What is AI?</strong>
+                            <div class="dropdown-text">Understanding Artificial Intelligence and its capabilities</div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <strong>AI for Climate</strong>
+                            <div class="dropdown-text">How AI helps combat global warming and environmental issues</div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <strong>Benefits of AI</strong>
+                            <div class="dropdown-text">Positive impacts of AI on society and the environment</div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a href="#health" class="nav-link">Health & Wellbeing</a>
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item">
+                            <strong>Good Health</strong>
+                            <div class="dropdown-text">Promoting wellness and healthy living practices</div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <strong>Environmental Health</strong>
+                            <div class="dropdown-text">How a healthy planet creates healthy people</div>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <strong>Sustainable Living</strong>
+                            <div class="dropdown-text">Lifestyle choices for personal and planetary health</div>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Building a Sustainable Future</h1>
+            <p>Combining technology, ecology, and health for a better tomorrow</p>
+            <a href="#about" class="cta-button">Learn More</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section scroll-reveal" id="about">
+        <h2 class="section-title">Our Mission</h2>
+        <div class="image-placeholder">🌍 Your Image Here</div>
+        <p style="text-align: center; font-size: 1.1rem; max-width: 800px; margin: 2rem auto; color: #636e72;">
+            We believe in the power of technology and nature working together. Our mission is to educate, inspire, 
+            and empower individuals to make positive changes for our planet and their health. Through innovative 
+            AI solutions and sustainable practices, we're building a greener, healthier world.
+        </p>
+    </section>
+
+    <!-- Main Topics Section -->
+    <section class="section" id="climate">
+        <h2 class="section-title">Climate & Environment</h2>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-icon">🌡️</div>
+                <h3>Global Warming</h3>
+                <p>Climate change is one of the most pressing challenges of our time. Rising temperatures, melting ice caps, and extreme weather events are transforming our planet. Understanding these changes is the first step toward making a difference.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">♻️</div>
+                <h3>Sustainability</h3>
+                <p>Sustainable living means meeting our needs without compromising future generations. From renewable energy to waste reduction, every small action contributes to a healthier planet.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌳</div>
+                <h3>Conservation</h3>
+                <p>Protecting biodiversity and natural habitats is crucial for maintaining ecological balance. Conservation efforts help preserve the delicate ecosystems that sustain all life on Earth.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Section -->
+    <section class="section scroll-reveal" id="ai">
+        <h2 class="section-title">AI for a Better World</h2>
+        <div class="image-placeholder">🤖 AI Technology Image Here</div>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <h3>What is AI?</h3>
+                <p>Artificial Intelligence is the science of creating machines that can think, learn, and solve problems like humans. From smart assistants to climate modeling, AI is revolutionizing how we understand and interact with the world.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌍</div>
+                <h3>AI & Climate Solutions</h3>
+                <p>AI helps predict weather patterns, optimize energy consumption, monitor deforestation, and develop innovative solutions to combat climate change. Machine learning algorithms can process vast amounts of environmental data to find patterns and solutions humans might miss.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💡</div>
+                <h3>Benefits to Society</h3>
+                <p>AI improves healthcare diagnostics, enhances education accessibility, optimizes resource management, and helps create more efficient systems that benefit both people and the planet.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Section -->
+    <section class="section scroll-reveal" id="health">
+        <h2 class="section-title">Health & Wellbeing</h2>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-icon">❤️</div>
+                <h3>Good Health & Well-being</h3>
+                <p>A healthy lifestyle encompasses physical, mental, and emotional wellness. Regular exercise, nutritious food, and mindfulness practices create a foundation for a fulfilling life.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌿</div>
+                <h3>Environmental Health</h3>
+                <p>Clean air, pure water, and toxin-free environments are essential for human health. Protecting our environment directly protects our well-being and that of future generations.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏡</div>
+                <h3>Sustainable Living</h3>
+                <p>Making eco-friendly choices in our daily lives improves both personal health and environmental health. From organic foods to green spaces, sustainable choices create healthier communities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section">
+        <h2 class="section-title">Our Impact</h2>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">1.5°C</div>
+                <div class="stat-label">Global Temperature Target</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Renewable Energy Goal</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2030</div>
+                <div class="stat-label">Sustainability Deadline</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 EcoHealth Initiative. Building a sustainable future together. 🌱</p>
+    </footer>
+
+    <script>
+        // Scroll reveal animation
+        const scrollReveal = () => {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', scrollReveal);
+        scrollReveal(); // Initial check
+    </script>
+</body>
+</html>
